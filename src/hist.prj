@@ -1,0 +1,9 @@
+vhdl work adc.vhd
+vhdl work functions.vhd
+vhdl work histogram.vhd
+vhdl work ram.vhd
+vhdl work Rx_uart.vhd
+vhdl work sp_ram.vhd
+vhdl work toplevel.vhd
+vhdl work Tx_uart.vhd
+vhdl work testbenchs/histogram.vhd

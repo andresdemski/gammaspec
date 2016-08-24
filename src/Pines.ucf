@@ -1,0 +1,62 @@
+## Pin de Clock de 50MHz del kit
+NET "CK40_IN"  LOC = "P36" | IOSTANDARD = LVCMOS33 ;
+
+NET "CK40_IN" TNM_NET = "CK40_IN";
+TIMESPEC "TS_CK40_IN" = PERIOD "CK40_IN" 25 ns HIGH 50% INPUT_JITTER 200 ps
+TIMESPEC "TS_" = PERIOD "CK40_IN" 25 ns HIGH 50%;
+#PRIORITY 1;
+
+
+## Restricciones de PINOUT del boton usado para RESET en el kit
+NET "RESET_IN"  LOC = "P1" | IOSTANDARD = LVCMOS33 ;
+
+## Pines del ADC a travez del Conector A2 del kit hacia la placa Y067-0A
+NET "ck40_ADC"  	 LOC = "P32" | DRIVE = 12  | SLEW = FAST | IOSTANDARD = LVCMOS33;
+NET "ADC_Port<0>"  LOC = "P13" | IOSTANDARD = LVCMOS33  ;
+NET "ADC_Port<1>"  LOC = "P14" | IOSTANDARD = LVCMOS33  ;
+NET "ADC_Port<2>"  LOC = "P15" | IOSTANDARD = LVCMOS33  ;
+NET "ADC_Port<3>"  LOC = "P16" | IOSTANDARD = LVCMOS33  ;
+NET "ADC_Port<4>"  LOC = "P21" | IOSTANDARD = LVCMOS33  ;
+NET "ADC_Port<5>"  LOC = "P22" | IOSTANDARD = LVCMOS33  ;
+NET "ADC_Port<6>"  LOC = "P23" | IOSTANDARD = LVCMOS33  ;
+NET "ADC_Port<7>"  LOC = "P27" | IOSTANDARD = LVCMOS33  ;
+NET "ADC_Port<8>"  LOC = "P28" | IOSTANDARD = LVCMOS33  ;
+NET "ADC_Port<9>"  LOC = "P30" | IOSTANDARD = LVCMOS33  ;
+
+## Pines del DAC a travez del Conector A2 del kit hacia la placa Y067-0A
+# NET "ck40_DAC"  	 LOC = "P96" | IOSTANDARD = LVCMOS33 ;
+# NET "DAC_Data<7>"  LOC = "P2"  | IOSTANDARD = LVCMOS33 ;
+# NET "DAC_Data<6>"  LOC = "P12" | IOSTANDARD = LVCMOS33 ;
+# NET "DAC_Data<5>"  LOC = "P11" | IOSTANDARD = LVCMOS33 ;
+# NET "DAC_Data<4>"  LOC = "P9"  | IOSTANDARD = LVCMOS33 ;
+# NET "DAC_Data<3>"  LOC = "P8"  | IOSTANDARD = LVCMOS33 ;
+# NET "DAC_Data<2>"  LOC = "P5"  | IOSTANDARD = LVCMOS33 ;
+# NET "DAC_Data<1>"  LOC = "P4"  | IOSTANDARD = LVCMOS33 ;
+# NET "DAC_Data<0>"  LOC = "P97" | IOSTANDARD = LVCMOS33 ;
+
+## Pines libre en el conector A2 que van a la Y067-0A
+# NET "TestOut"   	 LOC = "P34"  | IOSTANDARD = LVCMOS33  ;
+
+# ## Restricciones de PINOUT del controlador del UART del kit
+NET "TxD"  LOC = "P71"  | IOSTANDARD = LVCMOS25 ;
+NET "RxD"  LOC = "P72"  | IOSTANDARD = LVCMOS25 ;
+
+## Restricciones de PINOUT de los leds de la Y069-1X
+NET "NLED1_PIN"  LOC = "P92" | IOSTANDARD = LVCMOS33 ;
+NET "NLED2_PIN"  LOC = "P85" | IOSTANDARD = LVCMOS33 ;
+NET "NLED3_PIN"  LOC = "P81" | IOSTANDARD = LVCMOS33 ;
+
+# NET "GainControlHV"  LOC = "P53" | IOSTANDARD = LVCMOS25 ;
+
+
+## Restricciones de PINOUT de los leds de la Y069-1X
+##NET "SincroCol"  LOC = "P55" | IOSTANDARD = LVCMOS25 ;
+##NET "SincroRow"  LOC = "P61" | IOSTANDARD = LVCMOS25 ;
+
+## J107 de la Y069-1X
+#NET "LVDS_TX_P"  LOC = "P74";
+#NET "LVDS_TX_N"  LOC = "P75";
+
+## J101 de la Y069-1X
+#NET "CLKIN_P"  LOC = "P38";
+#NET "CLKIN_N"  LOC = "P39";

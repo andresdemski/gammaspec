@@ -1,0 +1,149 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ADC_Port	toplevel.vhd	/^        ADC_Port : in std_logic_vector(9 downto 0) ;$/;"	p
+CK40_ADC	toplevel.vhd	/^        CK40_ADC :out std_logic;$/;"	p
+CK40_IN	toplevel.vhd	/^	    CK40_IN : in std_logic;$/;"	p
+CNT	toplevel.vhd	/^	signal CNT : std_logic_vector (25-1 downto 0):= (others=>'0');$/;"	s
+LE	Tx_uart.vhd	/^		LE : in std_logic;$/;"	p
+Load	Tx_uart.vhd	/^		Load : in std_logic_vector(BITS-1 downto 0);$/;"	p
+NLED1_PIN	toplevel.vhd	/^        NLED1_PIN : out std_logic;$/;"	p
+NLED2_PIN	toplevel.vhd	/^        NLED2_PIN : out std_logic;$/;"	p
+NLED3_PIN	toplevel.vhd	/^        NLED3_PIN : out std_logic;$/;"	p
+PARAPROBAR	toplevel.vhd	/^        PARAPROBAR: out std_logic_vector (7 downto 0)$/;"	p
+Reset_in	toplevel.vhd	/^        Reset_in : in std_logic;$/;"	p
+RxD	toplevel.vhd	/^        RxD : in std_logic;$/;"	p
+Rx_uart	Rx_uart.vhd	/^entity Rx_uart is$/;"	e
+TIMER_BITS	Rx_uart.vhd	/^	constant TIMER_BITS : natural := log2(TIMER_TIME);$/;"	c
+TIMER_BITS	Tx_uart.vhd	/^	constant TIMER_BITS : natural := log2(TIMER_TIME);$/;"	c
+TIMER_TIME	Rx_uart.vhd	/^	constant TIMER_TIME : natural := CORE\/BAUDRATE;$/;"	c
+TIMER_TIME	Tx_uart.vhd	/^	constant TIMER_TIME : natural := CORE\/BAUDRATE;$/;"	c
+Tx	Tx_uart.vhd	/^		Tx : out std_logic;$/;"	p
+TxD	toplevel.vhd	/^        TxD : out std_logic;$/;"	p
+Tx_aux	Tx_uart.vhd	/^	signal Tx_aux : std_logic := '1';$/;"	s
+Tx_busy	Tx_uart.vhd	/^		Tx_busy : out std_logic;$/;"	p
+Tx_busy_aux	Tx_uart.vhd	/^	signal Tx_busy_aux : std_logic := '0';$/;"	s
+Tx_busy_i	Tx_uart.vhd	/^	signal Tx_busy_i : std_logic:='0';$/;"	s
+Tx_i	Tx_uart.vhd	/^	signal Tx_i : std_logic:= '1';$/;"	s
+Tx_uart	Tx_uart.vhd	/^entity Tx_uart is$/;"	e
+adc	adc.vhd	/^entity adc is$/;"	e
+clk	Rx_uart.vhd	/^		clk : in std_logic;$/;"	p
+clk	Tx_uart.vhd	/^		clk : in std_logic;$/;"	p
+cnt,	Rx_uart.vhd	/^	signal cnt, cnt_i: std_logic_vector (log2(BITS)-1 downto 0):= (others=>'0');$/;"	s
+count	Tx_uart.vhd	/^	signal count : std_logic_vector(log2(BITS) downto 0);$/;"	s
+data	Tx_uart.vhd	/^	signal data : std_logic_vector(BITS-1 downto 0):= (others=>'0');$/;"	s
+functions	functions.vhd	/^package body functions is$/;"	P
+functions	functions.vhd	/^package functions is$/;"	P
+histogram	histogram.vhd	/^entity histogram is$/;"	e
+log2	functions.vhd	/^	function log2 (x : positive) return natural is$/;"	f
+mem	ram.vhd	/^    signal mem : ram_t:= (others => (others => '0'));$/;"	s
+mem	sp_ram.vhd	/^    signal mem : ram_t:= (others => (others => '0'));$/;"	s
+mux_t	histogram.vhd	/^    type mux_t is array (0 to HIST_BITS\/DATA_BITS-1) of std_logic_vector (DATA_BITS-1 downto 0);$/;"	t
+mux_t	oscope.vhd	/^    type mux_t is array (0 to OSC_BITS\/DATA_BITS-1) of std_logic_vector (DATA_BITS-1 downto 0);$/;"	t
+oe	Rx_uart.vhd	/^		oe : out std_logic;$/;"	p
+oe_i,	Rx_uart.vhd	/^	signal oe_i, oe_aux : std_logic :='0';$/;"	s
+oscope	oscope.vhd	/^entity oscope is$/;"	e
+output	Rx_uart.vhd	/^		output : out std_logic_vector(BITS-1 downto 0);$/;"	p
+output_i,	Rx_uart.vhd	/^	signal output_i, output_aux,reg_out,reg_out_i : std_logic_vector(BITS-1 downto 0) := (others=>'0');$/;"	s
+p1Addr	ram.vhd	/^        p1Addr : in std_logic_vector(log2(LENGTH)-1 downto 0);$/;"	p
+p1Clk	ram.vhd	/^        p1Clk : in std_logic;$/;"	p
+p1Do	ram.vhd	/^        p1Do : out std_logic_vector(PORT1_BITS-1 downto 0);$/;"	p
+p1En	ram.vhd	/^        p1En : in std_logic;$/;"	p
+p2Addr	ram.vhd	/^        p2Addr : in std_logic_vector(log2(LENGTH*PORT1_BITS\/PORT2_BITS)-1 downto 0);$/;"	p
+p2Clk	ram.vhd	/^        p2Clk : in std_logic$/;"	p
+p2Di	ram.vhd	/^        p2Di : in std_logic_vector(PORT2_BITS-1 downto 0);$/;"	p
+p2Do	ram.vhd	/^        p2Do : out std_logic_vector(PORT2_BITS-1 downto 0);$/;"	p
+p2En	ram.vhd	/^        p2En : in std_logic;$/;"	p
+p2We	ram.vhd	/^        p2We : in std_logic;$/;"	p
+pAddr	sp_ram.vhd	/^        pAddr : in std_logic_vector(log2(LENGTH)-1 downto 0);$/;"	p
+pCE	histogram.vhd	/^        pCE : in std_logic;$/;"	p
+pCE	oscope.vhd	/^        pCE : in std_logic;$/;"	p
+pClk	histogram.vhd	/^        pClk : in std_logic;$/;"	p
+pClk	oscope.vhd	/^        pClk : in std_logic;$/;"	p
+pClk	sp_ram.vhd	/^        pClk : in std_logic$/;"	p
+pClk_in	adc.vhd	/^        pClk_in : in std_logic;$/;"	p
+pClk_out	adc.vhd	/^        pClk_out : out std_logic;$/;"	p
+pData	histogram.vhd	/^        pData : out std_logic_vector (DATA_BITS-1 downto 0);$/;"	p
+pData	oscope.vhd	/^        pData : out std_logic_vector (DATA_BITS-1 downto 0);$/;"	p
+pDataAddr	histogram.vhd	/^        pDataAddr : in std_logic_vector (log2(HIST_SIZE*HIST_BITS\/DATA_BITS)-1 downto 0);$/;"	p
+pDataAddr	oscope.vhd	/^        pDataAddr : in std_logic_vector (log2(LENGTH*OSC_BITS\/DATA_BITS)-1 downto 0);$/;"	p
+pDataAv	histogram.vhd	/^        pDataAv : out std_logic;$/;"	p
+pDataAv	oscope.vhd	/^        pDataAv : out std_logic;$/;"	p
+pDi	sp_ram.vhd	/^        pDi : in std_logic_vector(PORT_BITS-1 downto 0);$/;"	p
+pDo	sp_ram.vhd	/^        pDo : out std_logic_vector(PORT_BITS-1 downto 0);$/;"	p
+pEn	sp_ram.vhd	/^        pEn : in std_logic;$/;"	p
+pIE	histogram.vhd	/^        pIE : in std_logic;$/;"	p
+pIE	oscope.vhd	/^        pIE : in std_logic;$/;"	p
+pInput	adc.vhd	/^        pInput : in std_logic_vector (BITS-1 downto 0);$/;"	p
+pInput	histogram.vhd	/^        pInput : in std_logic_vector (log2(HIST_SIZE)-1 downto 0);  -- No esta registrada, no modificar si pReady no esta en 1$/;"	p
+pInput	oscope.vhd	/^        pInput : in std_logic_vector (log2(LENGTH)-1 downto 0);$/;"	p
+pOa	adc.vhd	/^        pOa : out std_logic$/;"	p
+pOutput	adc.vhd	/^        pOutput : out std_logic_vector( BITS-1 downto 0);$/;"	p
+pReady	histogram.vhd	/^        pReady : out  std_logic $/;"	p
+pReady	oscope.vhd	/^        pReady : out  std_logic $/;"	p
+pReqData	histogram.vhd	/^        pReqData : in std_logic;$/;"	p
+pReqData	oscope.vhd	/^        pReqData : in std_logic;$/;"	p
+pRst	adc.vhd	/^        pRst : in std_logic;$/;"	p
+pRst	histogram.vhd	/^        pRst : in std_logic;$/;"	p
+pRst	oscope.vhd	/^        pRst : in std_logic;$/;"	p
+pST	oscope.vhd	/^        pST : in std_logic; -- Start Trigger$/;"	p
+pT	oscope.vhd	/^        pT : out std_logic; -- Trigger!!$/;"	p
+pWe	sp_ram.vhd	/^        pWe : in std_logic;$/;"	p
+rAddr	histogram.vhd	/^    signal rAddr ,rAddr_i : std_logic_vector (log2(HIST_SIZE) downto 0):= (others=>'0');$/;"	s
+rAddr	oscope.vhd	/^    signal rAddr ,rAddr_i : std_logic_vector (log2(LENGTH) downto 0):= (others=>'0');$/;"	s
+rData,	histogram.vhd	/^    signal rData, rData_i : std_logic_vector (DATA_BITS-1 downto 0):=(others=>'0');$/;"	s
+rData,	oscope.vhd	/^    signal rData, rData_i : std_logic_vector (DATA_BITS-1 downto 0):=(others=>'0');$/;"	s
+rDataAv,	histogram.vhd	/^    signal rDataAv, rDataAv_i : std_logic :='0';$/;"	s
+rDataAv,	oscope.vhd	/^    signal rDataAv, rDataAv_i : std_logic :='0';$/;"	s
+rDi	histogram.vhd	/^    signal rDi ,rDi_i : std_logic_vector (HIST_BITS-1 downto 0):= (others=>'0');$/;"	s
+rDi	oscope.vhd	/^    signal rDi ,rDi_i : std_logic_vector (OSC_BITS-1 downto 0):= (others=>'0');$/;"	s
+rDiMEM	toplevel.vhd	/^    signal rDiMEM : std_logic_vector(31 downto 0):=(others=>'0');$/;"	s
+rDo	histogram.vhd	/^    signal rDo : std_logic_vector (HIST_BITS-1 downto 0):= (others=>'0');$/;"	s
+rDo	oscope.vhd	/^    signal rDo : std_logic_vector (OSC_BITS-1 downto 0):= (others=>'0');$/;"	s
+rDo	sp_ram.vhd	/^    signal rDo : std_logic_vector (PORT_BITS-1 downto 0):= (others =>'0');$/;"	s
+rDoMEM	toplevel.vhd	/^    signal rDoMEM : std_logic_vector(31 downto 0):=(others=>'0');$/;"	s
+rEn	histogram.vhd	/^    signal rEn ,rEn_i : std_logic :='0';$/;"	s
+rEn	oscope.vhd	/^    signal rEn ,rEn_i : std_logic :='0';$/;"	s
+rRaddrByteMEM	toplevel.vhd	/^    signal rRaddrByteMEM : std_logic_vector(11 downto 0) := (others=>'0');$/;"	s
+rReady,	histogram.vhd	/^    signal rReady, rReady_i : std_logic :='0';$/;"	s
+rReady,	oscope.vhd	/^    signal rReady, rReady_i : std_logic :='0';$/;"	s
+rWaddrMEM	toplevel.vhd	/^    signal rWaddrMEM : std_logic_vector (9 downto 0):= (others=>'0');$/;"	s
+rWe	histogram.vhd	/^    signal rWe ,rWe_i : std_logic := '0';$/;"	s
+rWe	oscope.vhd	/^    signal rWe ,rWe_i : std_logic := '0';$/;"	s
+ram	ram.vhd	/^entity ram is$/;"	e
+ram_t	ram.vhd	/^    type ram_t is array (0 to LENGTH-1) of std_logic_vector (PORT1_BITS-1 downto 0);$/;"	t
+ram_t	sp_ram.vhd	/^    type ram_t is array (0 to LENGTH-1) of std_logic_vector (PORT_BITS-1 downto 0);$/;"	t
+rst	Rx_uart.vhd	/^		rst : in std_logic$/;"	p
+rst	Tx_uart.vhd	/^		rst : in std_logic$/;"	p
+rst_count,rst_count_i	Tx_uart.vhd	/^	signal rst_count,rst_count_i : std_logic:= '0';$/;"	s
+rx	Rx_uart.vhd	/^		rx : in std_logic;$/;"	p
+rx_i,	Rx_uart.vhd	/^	signal rx_i, rx_o : std_logic:='0';$/;"	s
+sDataMux	histogram.vhd	/^    signal sDataMux : mux_t:= (others => (others => '0'));$/;"	s
+sDataMux	oscope.vhd	/^    signal sDataMux : mux_t:= (others => (others => '0'));$/;"	s
+sOaADC	toplevel.vhd	/^    signal sOaADC : std_logic := '0';$/;"	s
+sOutADC	toplevel.vhd	/^    signal sOutADC : std_logic_vector (9 downto 0):= (others=>'0');$/;"	s
+sP8out	toplevel.vhd	/^    signal sP8out : std_logic_vector (7 downto 0):=(others=>'0');$/;"	s
+sRxOe	toplevel.vhd	/^    signal sRxOe : std_logic := '0'; $/;"	s
+sRxOut	toplevel.vhd	/^    signal sRxOut : std_logic_vector (7 downto 0) := (others=>'0');$/;"	s
+sTxIe	toplevel.vhd	/^    signal sTxIe : std_logic := '0';$/;"	s
+sTxIn	toplevel.vhd	/^    signal sTxIn : std_logic_vector (7 downto 0) := (others=>'0');$/;"	s
+sec,	Rx_uart.vhd	/^	signal sec, delay, delay_i : std_logic :='0';	$/;"	s
+sp_ram	sp_ram.vhd	/^entity sp_ram is$/;"	e
+state,	histogram.vhd	/^    signal state, next_state : state_type:= IDLE; $/;"	s
+state,	oscope.vhd	/^    signal state, next_state : state_type:= IDLE; $/;"	s
+state,state_i	Rx_uart.vhd	/^	signal state,state_i : state_type:= IDLE;$/;"	s
+state,state_i	Tx_uart.vhd	/^	signal state,state_i : state_type:= IDLE;$/;"	s
+state_type	Rx_uart.vhd	/^	type state_type is (IDLE,STARTING, RECEIVING, STOPING);$/;"	t
+state_type	Tx_uart.vhd	/^	type state_type is (IDLE, STARTING, SENDING, STOPING);$/;"	t
+state_type	histogram.vhd	/^    type state_type is (IDLE,INCREMENTING,READING, R_SENDING, SENDING, RESET); $/;"	t
+state_type	oscope.vhd	/^    type state_type is (IDLE, RESET); $/;"	t
+t_cnt,t_cmp,t_cmp_i	Rx_uart.vhd	/^	signal t_cnt,t_cmp,t_cmp_i : std_logic_vector (TIMER_BITS-1 downto 0):= (others => '0');$/;"	s
+t_finish,	Rx_uart.vhd	/^	signal t_finish, t_start,t_start_i : std_logic :='0';$/;"	s
+timer,	Tx_uart.vhd	/^	signal timer, timer_count,timer_i :std_logic_vector(TIMER_BITS-1 downto 0);$/;"	s
+timer_e,timer_e_i,	Tx_uart.vhd	/^	signal timer_e,timer_e_i, timer_start, timer_start_i,timer_finish: std_logic := '0';$/;"	s
+toplevel	toplevel.vhd	/^entity toplevel is$/;"	e
+v	functions.vhd	/^		variable v : std_logic_vector(0 downto 0);$/;"	v
+vectorize	functions.vhd	/^	function vectorize(s : std_logic) return std_logic_vector is$/;"	f
