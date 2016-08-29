@@ -12,7 +12,7 @@ entity Tx_uart is
 	);
 	port (
 		Tx : out std_logic;
-		Load : in std_logic_vector(BITS-1 downto 0);
+		Input : in std_logic_vector(BITS-1 downto 0);
 		LE : in std_logic;
 		Tx_busy : out std_logic;
 		clk : in std_logic;
@@ -32,12 +32,12 @@ architecture RTL of Tx_uart is
 	signal Tx_busy_i : std_logic:='0';
 	
 	signal rst_count,rst_count_i : std_logic:= '0';
-	signal count : std_logic_vector(log2(BITS) downto 0);
+	signal count : std_logic_vector(log2(BITS) downto 0):=(others=>'0');
 	
 	signal timer_e,timer_e_i, timer_start, timer_start_i,timer_finish: std_logic := '0';
-	signal timer, timer_count,timer_i :std_logic_vector(TIMER_BITS-1 downto 0);
+	signal timer, timer_count,timer_i :std_logic_vector(TIMER_BITS-1 downto 0):=(others=>'0');
 	
-	signal data : std_logic_vector(BITS-1 downto 0):= (others=>'0');
+	signal data,data_i : std_logic_vector(BITS-1 downto 0):= (others=>'0');
 	
 	signal Tx_aux : std_logic := '1';
 	signal Tx_busy_aux : std_logic := '0';
@@ -59,17 +59,15 @@ begin
 			timer <= timer_i;
 			timer_e <= timer_e_i;
 			timer_start <= timer_start_i;
+            Tx_busy_aux <= Tx_busy_i;
 			rst_count <= rst_count_i;
-			Tx_busy_aux <= Tx_busy_i;
-			if LE='1' then 
-				data <= load; 	
-			end if;
+			data <= data_i; 	
 		end if;
 	end process;
 
 	Tx <= Tx_aux;
-	Tx_busy <= Tx_busy_aux;
-	OUT_STATE: process (timer_e,Tx_aux,Tx_busy_aux,LE,data,state,timer,rst_count,timer_start, timer_finish, count)
+	Tx_busy <= Tx_busy_i; -- Le saque el FF para que reaccione mas rapido
+	OUT_STATE: process (timer_e,data,Input,Tx_aux,Tx_busy_aux,LE,data,state,timer,rst_count,timer_start, timer_finish, count)
 	begin
 		state_i <= state;
 		Tx_i <= Tx_aux;
@@ -78,12 +76,14 @@ begin
 		timer_start_i <= timer_start;
 		Tx_busy_i <= Tx_busy_aux;
 		timer_e_i <= timer_e;
+        data_i <= data;
 		case state is
 		when IDLE => 
 				Tx_i <= '1';
 				Tx_busy_i <= '0';
 				if LE='1' then
 					Tx_busy_i <= '1';
+                    data_i <= Input;
 					state_i <= STARTING;
 					timer_i <= std_logic_vector(to_unsigned(TIMER_TIME-3,timer_count'length));
 					timer_e_i <= '1';
@@ -91,6 +91,7 @@ begin
 					Tx_i <= '0';
 				end if;	
 			when STARTING =>
+				Tx_busy_i <= '1';
 				timer_start_i <= '0';
 				if timer_finish='1' then
 					state_i <= SENDING;
@@ -100,6 +101,7 @@ begin
 				end if;								
 				
 			when SENDING =>
+				Tx_busy_i <= '1';
 				rst_count_i <= '0';
 				Tx_i <= data(to_integer(unsigned(count(count'length-2 downto 0) )));	 				
 				if count(count'length-1)='1' then
@@ -108,6 +110,7 @@ begin
 					Tx_i <= '1';					
 				end if;
 			when STOPING => 			
+				Tx_busy_i <= '1';
 				if timer_finish='1' then
 					Tx_busy_i <= '0';
 					state_i <= IDLE;

@@ -10,12 +10,8 @@ signal= filter(forma,1,signal);
 
 signal = signal + abs(min(signal));
 signal = signal/max(signal);
-signal = signal* (2^12 -1);
+signal = signal* (2^16 -1);
 
-fp = fopen('input.dat','w');
-
-for i=1:N
-    fprintf(fp,'%.0f\n',signal(i));
+for i=1:numel(signal)
+    fprintf('%.0f,',signal(i));
 end
-
-fclose(fp);

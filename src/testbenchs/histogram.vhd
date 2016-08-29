@@ -84,7 +84,7 @@ begin
         sReqData <= '0';
         wait for CLK_PERIOD*4;  -- Para que no me haga quilombos en el t=0
 
-        for i in 1 to 100*HIST_SIZE loop
+        for i in 1 to 10*HIST_SIZE loop
             Input := RV.RandSlv(0,HIST_SIZE-1,log2(HIST_SIZE));
             sInput <= Input;
             sIE <= '1';

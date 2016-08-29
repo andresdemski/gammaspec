@@ -20,8 +20,8 @@ end entity oscope_tb;
 architecture RTL of oscope_tb is
 
     constant CLK_PERIOD : time := 40 ns;
-    constant DATA_BITS : natural := 12;
-    constant OSC_BITS : natural := 12;
+    constant DATA_BITS : natural := 8;
+    constant OSC_BITS : natural := 16;
     constant LENGTH : natural := 2**10;
     constant DEPTH : natural := 2**9-1;
 
@@ -45,7 +45,7 @@ begin
 
     DUT: entity work.oscope 
     generic map(
-        DATA_BITS => DATA_BITS,
+        DATA_BITS=> DATA_BITS,
         OSC_BITS => OSC_BITS,
         LENGTH => LENGTH,
         DEPTH => DEPTH
@@ -82,12 +82,15 @@ begin
         variable input : integer;
     begin
         file_open(fh,"testbenchs/input.dat",READ_MODE);
+        sIE <= '1';
         while not endfile(fh) loop
             readline(fh,lv);
             read(lv,input);
             wait until rising_edge(sClk);
+            sIE <= not sIE;
             sInput <= std_logic_vector(to_unsigned(input,sInput'length));
         end loop;
+        wait for 1000 ms;
         file_close(fh);
     end process;
 
@@ -101,16 +104,16 @@ begin
 
         wait for 40 ns;
 
-        for j in 1 to 10 loop
+        for j in 1 to 3 loop
             sTedge <= not sTedge;
             sTStart <= '1';
-            sTlevel <= RV.RandSlv(0,2**OSC_BITS-1,OSC_BITS);
+            sTlevel <= RV.RandSlv(0,4096,OSC_BITS);
             wait until sReady='0';
             sTStart <= '0';
             wait until sReady='1';
             wait for 10*CLK_PERIOD;
 
-            for i in 0 to DEPTH loop
+            for i in 0 to (DEPTH+1)*2-1 loop
                 sDataAddr <= std_logic_vector(to_unsigned(i,sDataAddr'length));
                 sReqData <= '1';
                 wait until sReady='0';

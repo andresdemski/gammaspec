@@ -6,8 +6,8 @@ use work.functions.all;
 
 entity oscope is
     generic (
-        DATA_BITS : natural := 12;
-        OSC_BITS : natural := 12;
+        DATA_BITS : natural := 8;
+        OSC_BITS : natural := 16;
         LENGTH : natural := 2**10;
         DEPTH : natural := 2**9
     );
@@ -31,7 +31,7 @@ end oscope;
 
 architecture Behavioral of oscope is
 
-    type state_type is (IDLE,PRETRIGGER,TRIGGERING,POSTRIGGER,R_SENDING,SENDING, RESET); 
+    type state_type is (IDLE,PRETRIGGER,TRIGGERING,POSTRIGGER,R_SENDING,SENDING); 
     signal state, next_state : state_type:= IDLE; 
 
     signal rDi ,rDi_i : std_logic_vector (OSC_BITS-1 downto 0):= (others=>'0');
@@ -39,8 +39,10 @@ architecture Behavioral of oscope is
     signal rAddr ,rAddr_i : std_logic_vector (log2(LENGTH)-1 downto 0):= (others=>'0');
     signal rDo : std_logic_vector (OSC_BITS-1 downto 0):= (others=>'0');
     signal rEn ,rEn_i : std_logic :='0';
-    signal rReady, rReady_i : std_logic :='0';
+    signal rReady, rReady_i : std_logic :='1';
     signal rDataAv, rDataAv_i : std_logic :='0';
+
+    signal rTCNT, rTCNT_i : std_logic_vector(16 downto 0):=(others=>'0');
     
     signal rData, rData_i : std_logic_vector (DATA_BITS-1 downto 0):=(others=>'0');
 
@@ -53,6 +55,7 @@ architecture Behavioral of oscope is
 
     type mux_t is array (0 to OSC_BITS/DATA_BITS-1) of std_logic_vector (DATA_BITS-1 downto 0);
     signal sDataMux : mux_t:= (others => (others => '0'));
+
 
 begin
 
@@ -67,17 +70,29 @@ begin
         )
         port map (
             pDo => rDo , 
-            pAddr => rAddr , 
+            pAddr => rAddr, 
             pEn  => rEn  , 
             pClk => pClk,
             pDi => rDi , 
             pWe => rWe 
         );
 
-    process (pClk)
+    process (pClk,pRst)
     begin
         if rising_edge(pClk) then    
-            if (pCE='1') then
+            if pRst='1' then
+                state <=  IDLE;
+                rDi <= (others=>'0') ;
+                rWe <= '0';
+                rAddr <= (others=>'0') ;
+                rEn <= '0' ;
+                rData <= (others=>'0');
+                rReady <= '1';
+                rDataAv <= '0';
+                rCNT <= (others=>'0');
+                rTidx <= (others=>'0');
+                rMidx <= (others=>'0');
+            elsif (pCE='1') then
                 state <=  next_state;
                 rDi <= rDi_i ;
                 rWe <= rWe_i ;
@@ -86,6 +101,7 @@ begin
                 rData <= rData_i;
                 rReady <= rReady_i;
                 rDataAv <= rDataAv_i;
+                rTCNT <= rTCNT_i;
                 rCNT <= rCNT_i;
                 rTidx <= rTidx_i;
                 rMidx <= rMidx_i;
@@ -93,40 +109,47 @@ begin
         end if;
     end process;
 
-    TRIGGER_DET : process (pClk)
+    TRIGGER_DET : process (pClk,pRst)
     begin
         if rising_edge(pClk) then
-            if (pCE='1') then
-                pipe_s1 <= pInput;
-                pipe_s2 <= pipe_s1;
-                if (pTedge='1') then
-                    if unsigned(pipe_s1)>unsigned(pTLevel) and unsigned(pipe_s2)<unsigned(pTLevel) then
-                        rTrigger <= '1';
+            if pRst='1' then
+                pipe_s1 <= (others=>'0');
+                pipe_s2 <= (others=>'0');
+                rTrigger <= '0';
+            elsif (pCE='1') then
+                if(pIE='1') then
+                    pipe_s1 <= pInput;
+                    pipe_s2 <= pipe_s1;
+                    rTrigger <= '0';
+                    if (pTedge='1') then
+                        if unsigned(pipe_s1)>unsigned(pTLevel) and unsigned(pipe_s2)<unsigned(pTLevel) then
+                            rTrigger <= '1';
+                        end if;
                     else
-                        rTrigger <= '0';
-                    end if;
-                else
-                    if unsigned(pipe_s1)<unsigned(pTLevel) and unsigned(pipe_s2)>unsigned(pTLevel) then
-                        rTrigger <= '1';
-                    else
-                        rTrigger <= '0';
+                        if unsigned(pipe_s1)<unsigned(pTLevel) and unsigned(pipe_s2)>unsigned(pTLevel) then
+                            rTrigger <= '1';
+                        end if;
                     end if;
                 end if;
             end if;
         end if;
     end process;
 
-    process(state,rWe,rAddr,rEn,rReady,pReqData,pDataAddr,pIE ,pInput,rDo,pRst,rDi,rData,sDataMux)
+    process(state,rWe,rAddr,rEn,rReady,
+            pReqData,pDataAddr,pIE,
+            pInput,rDo,pRst,rDi,rData,
+            rCNT, rTidx, rMidx, pTStart,
+            rTrigger, sDataMux, rTCNT)
     begin
         next_state <= state;
-        rDi_i <= rDi;
-        rWe_i <= rWe;
+        rWe_i <= '0';
         rAddr_i <= rAddr;
         rEn_i <= rEn;
         rReady_i <= rReady;
         rData_i <= rData;
         rDataAv_i <= '0';
         rDi_i <= pInput;
+        rTCNT_i <= rTCNT;
         rCNT_i <= rCNT;
         rTidx_i<= rTidx;
         rDataAv_i <= '0';
@@ -141,7 +164,7 @@ begin
                 if pReqData='1' then
                     next_state <= R_SENDING;
                     rEn_i <= '1';
-                    rAddr_i <= std_logic_vector(unsigned(rMidx)+unsigned(pDataAddr)); 
+                    rAddr_i <= std_logic_vector(unsigned(rMidx)+unsigned(pDataAddr(pDataAddr'length-1 downto log2(OSC_BITS/DATA_BITS)))); 
                     rReady_i <= '0';
                 elsif pTStart='1' then
                     next_state <= PRETRIGGER;
@@ -154,30 +177,41 @@ begin
 
 
             when PRETRIGGER =>
-                rCNT_i <= std_logic_vector(unsigned(rCNT)+to_unsigned(1,rCNT'length));
-                rAddr_i <= std_logic_vector(unsigned(rAddr)+to_unsigned(1,rAddr'length)); 
-                if unsigned(rCNT)=to_unsigned(DEPTH/2+2,rCNT'length) then
-                    next_state <= TRIGGERING;
+                if (pIE='1') then 
+                    rCNT_i <= std_logic_vector(unsigned(rCNT)+to_unsigned(1,rCNT'length));
+                    rAddr_i <= std_logic_vector(unsigned(rAddr)+to_unsigned(1,rAddr'length)); 
+                    rWE_i <='1';
+                    if unsigned(rCNT)=to_unsigned(DEPTH/2+2,rCNT'length) then
+                        next_state <= TRIGGERING;
+                        rTCNT_i <= (others=>'0');
+                    end if;
                 end if;
 
             when TRIGGERING =>
-                rAddr_i <= std_logic_vector(unsigned(rAddr)+to_unsigned(1,rAddr'length)); 
-                rReady_i <= '0';
-                if (rTrigger='1') then
-                    next_state <= POSTRIGGER;
-                    rCNT_i <= (others=>'0');
-                    rTidx_i<= rAddr;
+                if (pIE='1') then 
+                    rAddr_i <= std_logic_vector(unsigned(rAddr)+to_unsigned(1,rAddr'length)); 
+                    rTCNT_i <= std_logic_vector(unsigned(rTCNT)+to_unsigned(1,rTCNT'length));  -- Contador para que no se quede en trigger infinatamente (2^16 clks)
+                    rWE_i <='1';
+                    rReady_i <= '0';
+                    if (rTrigger='1') or rTCNT(16)='1' then
+                        next_state <= POSTRIGGER;
+                        rCNT_i <= (others=>'0');
+                        rTidx_i<= rAddr;
+                    end if;
                 end if;
 
             when POSTRIGGER =>
-                rCNT_i <= std_logic_vector(unsigned(rCNT)+to_unsigned(1,rCNT'length));
-                rAddr_i <= std_logic_vector(unsigned(rAddr)+to_unsigned(1,rAddr'length)); 
-                if unsigned(rCNT)=to_unsigned(DEPTH/2,rCNT'length) then
-                    rMidx_i <= std_logic_vector(unsigned(rTidx)-to_unsigned(DEPTH/2+2,rTidx'length));
-                    next_state <= IDLE;
-                    rEn_i <= '0';
-                    rWe_i <= '0';
-                    rReady_i <= '1';
+                if (pIE='1') then 
+                    rCNT_i <= std_logic_vector(unsigned(rCNT)+to_unsigned(1,rCNT'length));
+                    rWE_i <='1';
+                    rAddr_i <= std_logic_vector(unsigned(rAddr)+to_unsigned(1,rAddr'length)); 
+                    if unsigned(rCNT)=to_unsigned(DEPTH/2,rCNT'length) then
+                        rMidx_i <= std_logic_vector(unsigned(rTidx)-to_unsigned(DEPTH/2+2,rTidx'length));
+                        next_state <= IDLE;
+                        rEn_i <= '0';
+                        rWe_i <= '0';
+                        rReady_i <= '1';
+                    end if;
                 end if;
 
 
@@ -186,18 +220,9 @@ begin
             when SENDING =>
                 next_state <= IDLE;
                 rDataAv_i <= '1';
-                rData_i <= rDo;
+                rData_i <= sDataMux(to_integer(unsigned(pDataAddr(log2(OSC_BITS/DATA_BITS)-1 downto 0))));
                 rReady_i <= '1';
                 rEn_i <='0';
-            
-            when RESET =>
-                rAddr_i<= std_logic_vector(unsigned(rAddr)+to_unsigned(1,rAddr'length));
-                if (unsigned(rAddr)=to_unsigned(LENGTH,rAddr'length)) then
-                    next_state <= IDLE;
-                    rWe_i <= '0';
-                    rEn_i <= '0';
-                    rReady_i <= '1';
-                end if;
         end case; 
     end process;
 
@@ -205,8 +230,6 @@ begin
       begin
           sDataMux(i) <= rDo((i+1)*DATA_BITS-1 downto i*DATA_BITS);
     end generate;
-			
-
 
 
 end architecture Behavioral; 
