@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui serialport charts
+QT       += core gui serialport charts printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,8 +12,14 @@ TARGET = gammaspec
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    device.cpp \
+    gammaspec.cpp \
+    qcustomplot.cpp
 
-HEADERS  +=
+HEADERS  += \
+    device.h \
+    gammaspec.h \
+    qcustomplot.h
 
 FORMS    +=
