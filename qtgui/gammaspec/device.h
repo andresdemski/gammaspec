@@ -15,6 +15,12 @@
 #define COMMAND_OSC_TLEVEL 3
 #define COMMAND_OSC_TEDGE 4
 #define COMMAND_OSC_STATUS 5
+#define COMMAND_HIST_START 6
+#define COMMAND_HIST_STOP 7
+#define COMMAND_HIST_DATA 8
+#define COMMAND_HIST_CLEAR 9
+#define COMMAND_HIST_TIME 10
+#define COMMAND_HIST_STATUS 11
 
 #define DEBUG(x)
 
@@ -29,7 +35,8 @@ class device : public QObject
 public:
     explicit device(QObject *parent = 0);
     QSerialPort port;
-    QByteArray *data;
+    QByteArray *Histdata;
+    QByteArray *Oscdata;
     QTimer *timeout;
 
 signals:
@@ -37,7 +44,8 @@ signals:
     void writeError();
     void cmdError ();
     void connectError();
-    void newData(QByteArray*);
+    void newOscData(QByteArray*);
+    void newHistData(QByteArray*);
 
 public slots:
     void Disconect ();
@@ -46,7 +54,13 @@ public slots:
     void OscSetTriggerEdge (int edge);
     void OscStart ();
     void OscData ();
-    void readyReadHandler ();
+    //void OscReadyReadHandler ();
+    void HistData ();
+    //void HistReadyReadHandler();
+    void HistSetTime (int);
+    void HistStart();
+    void HistStop();
+    void HistClear();
     void timeoutHandler ();
 
 private:

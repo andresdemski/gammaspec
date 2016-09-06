@@ -20,10 +20,12 @@ int main(int argc, char *argv[])
 
 
     gammaspec *dev = new gammaspec;
+    w.setCentralWidget(dev);
 
-    emit dev->fpgaConnect("/dev/ttyUSB0");
-    emit dev->cmdOscTLevel(0.5);
-    //emit dev->OscUpdateSeries(series);
+    //emit dev->cmdOscTLevel(0.5);
+    //emit dev->cmdHistTime(1);
+
+ //emit dev->OscUpdateSeries(series);
     /*
     device dev;
     dev.Connect("/dev/ttyUSB0");
@@ -37,5 +39,6 @@ int main(int argc, char *argv[])
     dev.Disconect();
 */
 
+    w.show();
     return a.exec();
 }

@@ -9,10 +9,10 @@ use std.textio.all;
 use ieee.std_logic_textio.all;
 
 
-entity comm_oscope_tb is
-end entity comm_oscope_tb;
+entity comm_hist_tb is
+end entity comm_hist_tb;
 
-architecture RTL of comm_oscope_tb is
+architecture RTL of comm_hist_tb is
 
     constant CLK_PERIOD : time := 40 ns;
     constant DATA_BITS : natural := 8;
@@ -22,7 +22,7 @@ architecture RTL of comm_oscope_tb is
     
     constant HIST_BITS : natural := 32;
     constant HIST_SIZE : natural := 2**12;
-    constant CORE_CLK : natural := 50000000;
+    constant CORE_CLK : natural := 25000000;
 
     signal sRst  : std_logic  := '0';
     signal sClk  : std_logic  := '0';
@@ -47,6 +47,7 @@ architecture RTL of comm_oscope_tb is
     signal sHist_Stop : std_logic:='0';
     signal sHist_Time : std_logic_vector(2*DATA_BITS-1 downto 0):=(others=>'0');
     signal sHist_Ready : std_logic:='0';
+    signal sHist_Input: std_logic_vector(11 downto 0):=(others=>'0');
 
     signal sTx  : std_logic_vector(DATA_BITS-1 downto 0):=(others=>'0');
     signal sTx_le  : std_logic  :='0';
@@ -115,7 +116,7 @@ begin
         DATA_BITS => 8,
         HIST_BITS => 32,
         HIST_SIZE => 2**12,
-        CORE_CLK => 50000000
+        CORE_CLK => 25000000
     )
 	port map(
         pReqData => sHist_ReqData,
@@ -123,7 +124,7 @@ begin
         pData => sHist_Data,
         pDataAv => sHist_DataAv,
         pIE =>'1',
-        pInput => (others=>'0'),
+        pInput => sHist_Input,
         pStart => sHist_Start,
         pStop => sHist_Stop,
         pTime => sHist_Time,
@@ -148,7 +149,7 @@ begin
         wait for CLK_PERIOD/2;
     end process;
 
-    INPUT_STIMULUS: process
+    OSC_INPUT_STIMULUS: process
         file fh : text;
         variable lv : line;
         variable input : integer;
@@ -164,57 +165,86 @@ begin
         file_close(fh);
     end process;
 
+    HIST_INPUT_STIMULUS : process
+        file fh : text;
+        variable lv : line;
+        variable input : integer;
+    begin
+        file_open(fh,"testbenchs/hist.dat",READ_MODE);
+        while not endfile(fh) loop
+            readline(fh,lv);
+            read(lv,input);
+            wait for 3*CLK_PERIOD;
+            wait until rising_edge(sClk);
+            sHist_input <= std_logic_vector(to_unsigned(input,sHist_Input'length));
+        end loop;
+        file_close(fh);
+    end process;
+
+
     RX_STIMULUS: process
     begin
 
-        wait for 10 us;
+        wait for 100 ns;
         wait until rising_edge(sClk);
-        sRx <= std_logic_vector(to_unsigned(COMMAND_OSC_STATUS,sRx'length));
+        sRx <= std_logic_vector(to_unsigned(COMMAND_HIST_STATUS,sRx'length));
         sRx_av <= '1';
         wait until rising_edge(sClk);
         sRx_av <= '0';
 
-        wait for 40 us;
+        wait for 10*CLK_PERIOD;
         wait until rising_edge(sClk);
-        sRx <= std_logic_vector(to_unsigned(COMMAND_OSC_TLEVEL,sRx'length));
+        sRx <= std_logic_vector(to_unsigned(COMMAND_HIST_TIME,sRx'length));
         sRx_av <= '1';
         wait until rising_edge(sClk);
         sRx_av <= '0';
-        wait for 50 us;
-
+        wait for 100 ns;
+        wait until rising_edge(sClk);
+        sRx <= "00000001";
+        sRx_av <= '1';
+        wait until rising_edge(sClk);
+        sRx_av <= '0';
+        wait for 100 ns;
         wait until rising_edge(sClk);
         sRx <= "00000000";
         sRx_av <= '1';
         wait until rising_edge(sClk);
         sRx_av <= '0';
+
+
+        wait for 10*CLK_PERIOD;
         wait until rising_edge(sClk);
-        sRx <= "00000111";
+        sRx <= std_logic_vector(to_unsigned(COMMAND_HIST_START,sRx'length));
         sRx_av <= '1';
         wait until rising_edge(sClk);
         sRx_av <= '0';
 
-        wait for 40 us;
+        wait for 20*CLK_PERIOD;
         wait until rising_edge(sClk);
-        sRx <= std_logic_vector(to_unsigned(COMMAND_OSC_START,sRx'length));
+        sRx <= std_logic_vector(to_unsigned(COMMAND_HIST_STATUS,sRx'length));
         sRx_av <= '1';
         wait until rising_edge(sClk);
         sRx_av <= '0';
 
-        wait for 40 us;
+        wait for 1400 us;--1 us  ;
+
+
         wait until rising_edge(sClk);
-        sRx <= std_logic_vector(to_unsigned(COMMAND_OSC_STATUS,sRx'length));
+        sRx <= std_logic_vector(to_unsigned(COMMAND_HIST_STOP,sRx'length));
         sRx_av <= '1';
         wait until rising_edge(sClk);
         sRx_av <= '0';
 
-        wait for 100 us;
+        wait for 10*CLK_PERIOD;
+
         wait until rising_edge(sClk);
-        sRx <= std_logic_vector(to_unsigned(COMMAND_OSC_DATA,sRx'length));
+        sRx <= std_logic_vector(to_unsigned(COMMAND_HIST_DATA,sRx'length));
         sRx_av <= '1';
         wait until rising_edge(sClk);
         sRx_av <= '0';
         
-        wait for 1500 *10 * 40 ns;--1 us  ;
+        wait for 4* (2**12) * 160 ns;--1 us  ;
+        wait for 100 * 160 ns;
         finish(0);
     end process;
 
@@ -235,7 +265,7 @@ begin
     begin
         wait until rising_edge(sTx_le);
         sTx_busy <= '1';
-        wait for 10*CLK_PERIOD;
+        wait for 2*CLK_PERIOD;
         wait until rising_edge(sClk); sTx_busy <= '0';
     end process;
 

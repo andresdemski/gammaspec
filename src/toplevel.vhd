@@ -22,12 +22,16 @@ end toplevel;
 
 architecture Behavioral of toplevel is
 
-    constant CLK_PERIOD : time := 40 ns;
     constant DATA_BITS : natural := 8;
     constant OSC_BITS : natural := 16;
     constant LENGTH : natural := 2**10;
     constant DEPTH : natural := 2**9-1;
     
+    constant HIST_BITS : natural := 32;
+    constant HIST_SIZE : natural := 2**12;
+    constant CORE_CLK : natural := 50000000;
+
+
     signal sRst  : std_logic  := '0';
     signal sClk  : std_logic  := '0';
     signal sCE  : std_logic  := '0';
@@ -42,6 +46,17 @@ architecture Behavioral of toplevel is
     signal sOsc_DataAddr  :std_logic_vector(log2(LENGTH*OSC_BITS/DATA_BITS)-1 downto 0) :=(others=>'0');
     signal sOsc_ReqData  :std_logic   :='0';
     signal sOsc_Ready  :std_logic   :='0';
+
+    signal sHist_ReqData : std_logic := '0';
+    signal sHist_DataAddr : std_logic_vector (log2(HIST_SIZE*HIST_BITS/DATA_BITS)-1 downto 0):= (others=>'0');
+    signal sHist_Data : std_logic_vector (DATA_BITS-1 downto 0):=(others=>'0');
+    signal sHist_DataAv : std_logic:='0';
+    signal sHist_Clr : std_logic:='0';
+    signal sHist_Start : std_logic:='0';
+    signal sHist_Stop : std_logic:='0';
+    signal sHist_Time : std_logic_vector(2*DATA_BITS-1 downto 0):=(others=>'0');
+    signal sHist_Ready : std_logic:='0';
+    signal sHist_Input: std_logic_vector(11 downto 0):=(others=>'0');
 
     signal sTx  : std_logic_vector(DATA_BITS-1 downto 0):=(others=>'0');
     signal sTx_le  : std_logic  :='0';
@@ -71,14 +86,19 @@ begin
     sCE <= '1';
     sIE <= '1';
 
+    sHist_Input <= sInput(15 downto 4);
+
     SIG_GEN: entity work.sigGen generic map( BITS => 16)
 	                            port map( pOut => sInput, pClk =>sClk);
 
     COMM: entity work.commCore generic map(  
             DATA_BITS => 8,
-            DATA_ADDR_BITS=> log2(LENGTH*OSC_BITS/DATA_BITS),
+            OSC_DATA_ADDR_BITS=> log2(LENGTH*OSC_BITS/DATA_BITS),
             OSC_BITS => 16,
             OSC_DEPTH => 512
+            -- HIST_DATA_ADDR_BITS => 14,
+            -- HIST_BITS => 32,
+            -- HIST_LENGTH => 2**12
            )
         port map(  
             pRx => sRx,
@@ -94,6 +114,15 @@ begin
             pOsc_Tedge => sOsc_Tedge,
             pOsc_TLevel => sOsc_TLevel,
             pOsc_TStart => sOsc_TStart,
+            pHist_ReqData => sHist_ReqData,
+            pHist_DataAddr => sHist_DataAddr,
+            pHist_Data => sHist_Data,
+            pHist_DataAv => sHist_DataAv,
+            pHist_Clr => sHist_Clr,
+            pHist_Start => sHist_Start,
+            pHist_Stop => sHist_Stop,
+            pHist_Time => sHist_Time,
+            pHist_Ready => sHist_Ready,
             pClk => sClk,
             pRst => sRst
         );
@@ -118,6 +147,30 @@ begin
         pCE => sCE,
         pRst => sRst,
         pReady => sOsc_Ready 
+    );
+
+    HIST: entity work.histogram
+    generic map(
+        DATA_BITS => 8,
+        HIST_BITS => 32,
+        HIST_SIZE => 2**12,
+        CORE_CLK => 25000000
+    )
+	port map(
+        pReqData => sHist_ReqData,
+        pDataAddr =>sHist_DataAddr,
+        pData => sHist_Data,
+        pDataAv => sHist_DataAv,
+        pIE => '1',
+        pInput => sHist_Input,
+        pStart => sHist_Start,
+        pStop => sHist_Stop,
+        pTime => sHist_Time,
+        pClr => sHist_Clr,
+        pClk => sClk,
+        pCE => sCE,
+        pRst => sRst,
+        pReady => sHist_Ready
     );
 
     TX: entity work.Tx_uart	

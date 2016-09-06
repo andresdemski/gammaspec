@@ -1,0 +1,48 @@
+[*]
+[*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
+[*] Sun Sep  4 21:10:30 2016
+[*]
+[dumpfile] "/home/ademski/Documents/CNEA/gammaspec/src/outputs/comm_hist_tb.ghw"
+[dumpfile_mtime] "Sun Sep  4 21:07:13 2016"
+[dumpfile_size] 612827
+[savefile] "/home/ademski/Documents/CNEA/gammaspec/src/outputs/comm_hist_tb.gtkw"
+[timestart] 0
+[size] 1920 1055
+[pos] -1 -1
+*-28.314531 699000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.comm_hist_tb.
+[sst_width] 197
+[signals_width] 158
+[sst_expanded] 1
+[sst_vpaned_height] 193
+@24
+#{top.comm_hist_tb.stx[7:0]} top.comm_hist_tb.stx[7] top.comm_hist_tb.stx[6] top.comm_hist_tb.stx[5] top.comm_hist_tb.stx[4] top.comm_hist_tb.stx[3] top.comm_hist_tb.stx[2] top.comm_hist_tb.stx[1] top.comm_hist_tb.stx[0]
+@28
+top.comm_hist_tb.comm.rtx_le
+top.comm_hist_tb.stx_busy
+@200
+-
+@24
+#{top.comm_hist_tb.srx[7:0]} top.comm_hist_tb.srx[7] top.comm_hist_tb.srx[6] top.comm_hist_tb.srx[5] top.comm_hist_tb.srx[4] top.comm_hist_tb.srx[3] top.comm_hist_tb.srx[2] top.comm_hist_tb.srx[1] top.comm_hist_tb.srx[0]
+@28
+top.comm_hist_tb.srx_av
+@200
+-
+@28
+top.comm_hist_tb.comm.comm_state
+top.comm_hist_tb.comm.rhist_start
+top.comm_hist_tb.comm.rhist_stop
+top.comm_hist_tb.comm.rhist_clr
+@200
+-
+@28
+top.comm_hist_tb.hist.state
+@22
+#{top.comm_hist_tb.hist.ptime[15:0]} top.comm_hist_tb.hist.ptime[15] top.comm_hist_tb.hist.ptime[14] top.comm_hist_tb.hist.ptime[13] top.comm_hist_tb.hist.ptime[12] top.comm_hist_tb.hist.ptime[11] top.comm_hist_tb.hist.ptime[10] top.comm_hist_tb.hist.ptime[9] top.comm_hist_tb.hist.ptime[8] top.comm_hist_tb.hist.ptime[7] top.comm_hist_tb.hist.ptime[6] top.comm_hist_tb.hist.ptime[5] top.comm_hist_tb.hist.ptime[4] top.comm_hist_tb.hist.ptime[3] top.comm_hist_tb.hist.ptime[2] top.comm_hist_tb.hist.ptime[1] top.comm_hist_tb.hist.ptime[0]
+@200
+-
+@22
+#{top.comm_hist_tb.hist.rdo[31:0]} top.comm_hist_tb.hist.rdo[31] top.comm_hist_tb.hist.rdo[30] top.comm_hist_tb.hist.rdo[29] top.comm_hist_tb.hist.rdo[28] top.comm_hist_tb.hist.rdo[27] top.comm_hist_tb.hist.rdo[26] top.comm_hist_tb.hist.rdo[25] top.comm_hist_tb.hist.rdo[24] top.comm_hist_tb.hist.rdo[23] top.comm_hist_tb.hist.rdo[22] top.comm_hist_tb.hist.rdo[21] top.comm_hist_tb.hist.rdo[20] top.comm_hist_tb.hist.rdo[19] top.comm_hist_tb.hist.rdo[18] top.comm_hist_tb.hist.rdo[17] top.comm_hist_tb.hist.rdo[16] top.comm_hist_tb.hist.rdo[15] top.comm_hist_tb.hist.rdo[14] top.comm_hist_tb.hist.rdo[13] top.comm_hist_tb.hist.rdo[12] top.comm_hist_tb.hist.rdo[11] top.comm_hist_tb.hist.rdo[10] top.comm_hist_tb.hist.rdo[9] top.comm_hist_tb.hist.rdo[8] top.comm_hist_tb.hist.rdo[7] top.comm_hist_tb.hist.rdo[6] top.comm_hist_tb.hist.rdo[5] top.comm_hist_tb.hist.rdo[4] top.comm_hist_tb.hist.rdo[3] top.comm_hist_tb.hist.rdo[2] top.comm_hist_tb.hist.rdo[1] top.comm_hist_tb.hist.rdo[0]
+[pattern_trace] 1
+[pattern_trace] 0
